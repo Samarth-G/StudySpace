@@ -1,9 +1,30 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { StyleSheet, Image } from 'react-native'
-import Colors from '../Utils/Colors'
+import Colors from '../../Utils/Colors';
+import * as WebBrowser from 'expo-web-browser';
+import { useWarmUpBrowser } from '../../../hooks/useWarmUpBrowser';
+import { useOAuth } from "@clerk/clerk-expo";
 
+WebBrowser.maybeCompleteAuthSession();
 export default function LoginScreen() {
+    useWarmUpBrowser();
+    const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
+
+    const onPress = async () => {
+        try {
+            const { createdSessionId, signIn, signUp, setActive } =
+              await startOAuthFlow();
+       
+            if (createdSessionId) {
+              setActive({ session: createdSessionId });
+            } else {
+              // Use signIn or signUp for next steps such as MFA
+            }
+          } catch (err) {
+            console.error("OAuth error", err);
+          }
+    };
   return (
     <View style={{
       display:'flex',
@@ -11,16 +32,17 @@ export default function LoginScreen() {
       alignItems:'center',
       marginTop:60
     }}>
-      <Image source ={require('./../../assets/images/logo.png')} 
+      <Image source ={require('./../../../assets/images/logo.png')} 
       style={styles.logoImage}
       />
-      <Image source={require('./../../assets/images/loginbackground.png')} 
+      <Image source={require('./../../../assets/images/ev-charging.png')} 
       style={styles.bgImage}/>
 
       <View style={{padding:20, alignItems:'center'}}>
         <Text style={styles.heading}>Find the best study spot on campus for you!</Text>
         <Text style={styles.bodyText}>For UBC students, by UBC students with real-time data sourced by the our community!</Text>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button}
+        onPress={onPress}>
           <Text style={{
             color:Colors.WHITE,
             textAlign:'center',
