@@ -1,10 +1,11 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { StyleSheet, View, Image} from 'react-native';
+import { StyleSheet, View, Text, Image} from 'react-native';
 import MapViewStyle from '../../Utils/MapViewStyle.json'
 import { UserLocationContext } from '../../Context/UserLocationContext';
+import Markers from './../HomeScreen/Markers'
 
-export default function AppMapView() {
+export default function AppMapView({placeList}) {
   
   const {location, setLocation} = useContext(UserLocationContext);
 
@@ -23,10 +24,16 @@ export default function AppMapView() {
             latitude: location?.latitude, 
             longitude: location?.longitude
           }}> 
-          <Image source={require('./../../../assets/images/car-marker.png')} 
+          <Image source={require('./../../../assets/images/user-marker.png')} 
           style={{width:60, height:60}}
           />
           </Marker>
+
+          {placeList && placeList.map((item, index) => (
+            <Markers key={index}
+            index={index}
+            place={item}/>
+          ))}
         </MapView>
     </View>
   )
