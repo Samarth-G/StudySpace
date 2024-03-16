@@ -30,12 +30,12 @@ export default function LoginScreen() {
       display:'flex',
       justifyContent:'center',
       alignItems:'center',
-      marginTop:60
+      marginTop:50
     }}>
-      <Image source ={require('./../../../assets/images/logo.png')} 
+      <Image source ={require('./../../../assets/images/logo3.png')} 
       style={styles.logoImage}
       />
-      <Image source={require('./../../../assets/images/ev-charging.png')} 
+      <Image source={require('./../../../assets/images/background.png')} 
       style={styles.bgImage}/>
 
       <View style={{padding:20, alignItems:'center'}}>
@@ -47,7 +47,7 @@ export default function LoginScreen() {
             color:Colors.WHITE,
             textAlign:'center',
             fontSize:17,
-            fontFamily:'outfit'
+            fontFamily:'outfit-medium',
           }}>Login with Google</Text>
 
         </TouchableOpacity>
@@ -72,12 +72,12 @@ const styles = StyleSheet.create({
     fontSize:25,
     fontFamily:'outfit-bold',
     textAlign:'center',
-    marginTop:15
+    marginTop:10
   },
   bodyText:{
     fontSize:17,
     fontFamily:'outfit',
-    marginTop:20,
+    marginTop:15,
     textAlign:'center',
     color:Colors.GRAYSCALE[4],
     paddingHorizontal: 15
@@ -88,6 +88,6 @@ const styles = StyleSheet.create({
     display:'flex',
     borderRadius:99,
     marginTop:80,
-    width:250
+    width:250,
   }
 });

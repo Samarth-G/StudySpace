@@ -6,14 +6,13 @@ const config={
     headers:{
         'Content-Type':'application/json',
         'X-Goog-Api-Key':GOOGLE_MAPS_API_KEY,
-        'X-Goog-FieldMask':[
-    'places.displayName',
-    'places.formattedAddress',
-    'places.location',
-    'places.rating',
-    'places.shortFormattedAddress',
-    'places.photos','places.id',
-    'places.accessibilityOptions']
+        'X-Goog-FieldMask':['places.displayName',
+        'places.formattedAddress',
+        'places.location',
+        'places.rating',
+        'places.shortFormattedAddress',
+        'places.photos','places.id',
+        'places.accessibilityOptions', 'places.currentOpeningHours']
     }
 }
 

@@ -1,9 +1,9 @@
 export default {
-    PRIMARY: '#0BC224', // Teal
+    PRIMARY: '#1AC6CE', // Teal
     ACCENT: '#FFC107', // Amber/Bright Yellow 
     SECONDARY: '#673AB7', // Deep Purple
 
-    WHITE_TRANSP:'#ffffff87',
+    WHITE_TRANSP:'#dddddd87',
     BLACK_TRANSP:'#00000087',
 
     // Neutrals

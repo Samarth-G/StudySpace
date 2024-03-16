@@ -4,18 +4,19 @@ import Colors from '../../Utils/Colors'
 import { useAuth, useUser } from '@clerk/clerk-expo'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+
 export default function ProfileScreen() {
   const {user}=useUser();
   const menu=[
     {
       id:1,
-      name:'My Favorite',
+      name:'My Favorites',
       icon:'heart-outline'
     },
     {
       id:2,
-      name:'Other Projects',
-      icon:'ios-file-tray-full-outline'
+      name:'Submit Feedback',
+      icon:'beer'
     },
     {
       id:3,
@@ -27,7 +28,7 @@ export default function ProfileScreen() {
   const navigation=useNavigation();
   return (
     <View>
-      <Text style={{padding:10,fontFamily:'outfit-medium',
+      <Text style={{margin:20, padding:10,fontFamily:'outfit-medium',
     fontSize:30}}>My
      <Text style={{color:Colors.PRIMARY}}> Profile</Text></Text>
     
@@ -67,9 +68,9 @@ export default function ProfileScreen() {
         <Pressable 
         onPress={()=>
           item.id==1?
-          navigation.navigate('favorite')
+          navigation.navigate('favourite')
           :item.id==3?signOut()
-          :Linking.openURL('https://tubeguruji-courses.vercel.app/')
+          :Linking.openURL('https://forms.gle/SXvRdih3836mBCy88')
 
         }
         style={{

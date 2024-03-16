@@ -1,12 +1,12 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import AppMapView from './AppMapView'
 import Header from './Header'
-import SearchBar from './SearchBar'
 import GlobalApi from '../../Utils/GlobalApi'
 import { UserLocationContext } from '../../Context/UserLocationContext'
 import PlaceListView from './PlaceListView'
-import { SelectMarkerContext } from '../../Context/SelectMarkerContext'
+import { SelectMarkerContext } from '../../Context/SelectMarkerContext' 
+import {LOCATION_LONGITUDE, LOCATION_LATITUDE} from 'react-native-dotenv'
 
 export default function HomeScreen() {
 
@@ -21,14 +21,14 @@ export default function HomeScreen() {
   const GetNearByPlace = () => {
     const data = {
       "includedTypes": ["library"],
-      "maxResultCount": 10,
+      "maxResultCount": 8,
       "locationRestriction": {
         "circle": {
           "center": {
-            "latitude": location?.latitude,
-            "longitude": location?.longitude
+            "latitude": LOCATION_LATITUDE, // location?.latitude
+            "longitude": LOCATION_LONGITUDE // location?.longitude
           },
-          "radius": 1000.0
+          "radius": 500.0
         }
       }
     }
@@ -43,10 +43,10 @@ return (
   <View>
     <View style={styles.headerContainer}>
       <Header />
-      <SearchBar searchedLocation={(location) => setLocation({
+      {/* <SearchBar searchedLocation={(location) => setLocation({
           latitude:location.lat,
           longitude:location.lng
-        })} />
+        })} /> */}
     </View>
     {placeList &&<AppMapView placeList={placeList}/>}
     <View style={styles.placeListContainer}>
@@ -62,9 +62,14 @@ const styles = StyleSheet.create({
   headerContainer: {
     position: 'absolute',
     zIndex: 10,
-    padding: 10,
+    padding: 7,
     width: '100%',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    marginTop:8,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
   },
   placeListContainer: {
     position: 'absolute',
