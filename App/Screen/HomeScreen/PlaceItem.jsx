@@ -1,12 +1,34 @@
-import { View, Text, Image, Dimensions } from 'react-native'
+import { View, Text, Image, Dimensions, Pressable } from 'react-native'
+import Toast from 'react-native-root-toast';
 import React from 'react'
 import Colors from '../../Utils/Colors'
 import GlobalApi from '../../Utils/GlobalApi'
 import { FontAwesome6, Ionicons } from '@expo/vector-icons';
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { app } from '../../Utils/FirebaseConfig'
+import { useUser } from '@clerk/clerk-expo';
 
 export default function PlaceItem({place}) {
     const PLACE_PHOTO_BASE_URL = 'https://places.googleapis.com/v1/'
-  return (  
+    const { user } = useUser();
+    const db = getFirestore(app);
+    let testColor = Colors.WHITE_TRANSP
+    const addFav = async(place) => {
+      await setDoc(doc(db, "fav-places", place.id),{ // (place.id + user.primaryEmailAddress.emailAddress)
+        user: user.primaryEmailAddress.emailAddress,
+        place_name: place.displayName.text} // place: place
+      );
+      Toast.show('Added to favorites!', {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+      });
+    }
+
+    return (  
     <View
     /* To make list scrollable */
     style={{
@@ -21,12 +43,18 @@ export default function PlaceItem({place}) {
         shadowRadius: 8,
     }}
     >  
+      <Pressable onPress={() => addFav(place)} style={({ pressed }) => [
+        {
+          opacity: pressed ? 0.2 : 1
+        }]}>
+        <Ionicons name='heart' size={30} color={testColor} style={{position:'absolute', top:15, right:15}}/>
+      </Pressable>
       <Image 
       source={
         place?.photos?
         {uri: PLACE_PHOTO_BASE_URL+place.photos[0]?.name+"/media?key="+GlobalApi?.GOOGLE_MAPS_API_KEY+"&maxHeightPx=800&maxWidthPx=1200"}
         :require('./../../../assets/images/background.png')}
-        style={{width:'100%', borderRadius:20, height:150}}
+        style={{width:'100%', borderRadius:20, height:150, zIndex:-1}}
       />
       <View style={{ padding: 15, paddingTop:8, paddingBottom:10 }}>
           <Text numberOfLines={1} style={{

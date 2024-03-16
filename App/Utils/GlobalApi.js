@@ -17,8 +17,10 @@ const config={
 }
 
 const NewNearByPlace=(data)=>axios.post(BASE_URL,data,config);
+const findPlaceById=(id)=>axios.get('https://places.googleapis.com/v1/places/' + id + '?fields=*&key=' + GOOGLE_MAPS_API_KEY);
 
 export default{
     NewNearByPlace,
+    findPlaceById,
     GOOGLE_MAPS_API_KEY
 }

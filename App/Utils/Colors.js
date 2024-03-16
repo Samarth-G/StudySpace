@@ -3,7 +3,7 @@ export default {
     ACCENT: '#FFC107', // Amber/Bright Yellow 
     SECONDARY: '#673AB7', // Deep Purple
 
-    WHITE_TRANSP:'#dddddd87',
+    WHITE_TRANSP:'#eeeeeec0',
     BLACK_TRANSP:'#00000087',
 
     // Neutrals
