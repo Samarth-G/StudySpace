@@ -14,7 +14,7 @@ export default function PlaceItem({ place, isFav, markedFav }) {
   const db = getFirestore(app);
   const addFav = async (place) => {
     await setDoc(
-      doc(db, "fav-places", place.id), // (place.id + user.primaryEmailAddress.emailAddress)
+      doc(db, "fav-places", place.id + user.primaryEmailAddress), // (place.id + user.primaryEmailAddress.emailAddress)
       {
         email: user.primaryEmailAddress.emailAddress,
         place: place, // placeID: place.id
@@ -86,7 +86,7 @@ export default function PlaceItem({ place, isFav, markedFav }) {
         </Pressable>
       ) : (
         <Pressable
-          onPress={() => onRemoveFav(place.id)}
+          onPress={() => onRemoveFav(place.id + user.primaryEmailAddress)}
           style={({ pressed }) => [
             {
               opacity: pressed ? 0.2 : 1,
@@ -179,7 +179,7 @@ export default function PlaceItem({ place, isFav, markedFav }) {
                 fontSize: 14,
               }}
             >
-              Wheelchair?
+              Accessibility
             </Text>
             <Text
               style={{
