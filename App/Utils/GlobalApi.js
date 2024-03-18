@@ -12,7 +12,7 @@ const config={
         'places.rating',
         'places.shortFormattedAddress',
         'places.photos','places.id',
-        'places.accessibilityOptions', 'places.currentOpeningHours']
+        'places.accessibilityOptions.wheelchairAccessibleEntrance', 'places.currentOpeningHours.openNow']
     }
 }
 

@@ -89,5 +89,9 @@ const styles = StyleSheet.create({
     borderRadius:99,
     marginTop:80,
     width:250,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
   }
 });

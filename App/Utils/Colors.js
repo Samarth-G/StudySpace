@@ -28,7 +28,7 @@ export default {
     LAVENDER: '#E6E6FA',
     CORAL: '#FF7F50',
     
-    ERROR: '#DC3545', // Red
+    RED: '#DC3545', // Red
     SUCCESS: '#28A745', // Green
     WARNING: '#FFC107', // Amber
     INFO: '#17A2B8',  // Turquoise  

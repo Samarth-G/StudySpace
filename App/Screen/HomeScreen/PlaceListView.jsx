@@ -1,9 +1,17 @@
 import { View, Text, FlatList, Dimensions } from 'react-native'
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import PlaceItem from './PlaceItem';
 import { SelectMarkerContext } from '../../Context/SelectMarkerContext';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { app } from '../../Utils/FirebaseConfig';
+import { useUser } from '@clerk/clerk-expo';
+
 // creates list of places
 export default function PlaceListView({placeList}) {
+    const {user} = useUser();  
+    const [favList, setFavList] = useState([]);
+    console.log("***", placeList.length);
+
     const flatListRef = useRef(null);
     const {selectedMarker, setSelectedMarker} = useContext(SelectMarkerContext);
 
@@ -24,7 +32,28 @@ export default function PlaceListView({placeList}) {
         index
     });
 
-    console.log("***", placeList);
+    const db = getFirestore(app);
+    useEffect(() => {
+      user&&getFav();
+    }, [user])
+    const getFav = async() => {
+      setFavList([]);
+      const q = query(collection(db, "fav-places"), 
+      where("email", "==", user?.primaryEmailAddress?.emailAddress));
+
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        // console.log(doc.id, " => ", doc.data());
+        setFavList(favList => [...favList, doc.data()]);
+      });
+    }
+
+    const isFav = (place) => {
+      const result = favList.find(item=>item.place.id==place.id);
+      // console.log("***", result);
+      return result?true:false;
+    }
+
   return (
     <View style={{flex:1}}>
       <FlatList
@@ -37,7 +66,8 @@ export default function PlaceListView({placeList}) {
         renderItem={({item, index})=>(
         <View key={index}>
             <PlaceItem place={item}
-            index={index} />
+            isFav={(place) => isFav(place)}
+            markedFav={() => getFav()}/>
         </View>
         )}
         />
