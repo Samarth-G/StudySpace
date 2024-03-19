@@ -26,7 +26,10 @@ export default function AppMapView({placeList}) {
             longitude: LOCATION_LONGITUDE // location?.longitude
           }}> 
           <Image source={require('./../../../assets/images/user-marker2.png')} 
-          style={{width:50, height:50}}
+          style={{width:50, height:50, shadowColor: '#287cff',
+          shadowOffset: {width: -4, height: 4},
+          shadowOpacity: 1,
+          shadowRadius: 6,}}
           />
           </Marker>
 
