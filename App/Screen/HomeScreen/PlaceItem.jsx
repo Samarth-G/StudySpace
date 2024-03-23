@@ -8,7 +8,7 @@ import { getFirestore, doc, setDoc, deleteDoc } from "firebase/firestore";
 import { app } from "../../Utils/FirebaseConfig";
 import { useUser } from "@clerk/clerk-expo";
 
-export default function PlaceItem({ place, isFav, markedFav }) {
+export default function PlaceItem({ place, isFav }) {
   const PLACE_PHOTO_BASE_URL = "https://places.googleapis.com/v1/";
   const { user } = useUser();
   const db = getFirestore(app);
@@ -28,7 +28,6 @@ export default function PlaceItem({ place, isFav, markedFav }) {
       hideOnPress: true,
       delay: 0,
     });
-    markedFav();
   };
 
   const onRemoveFav = async(id) => {
@@ -41,7 +40,6 @@ export default function PlaceItem({ place, isFav, markedFav }) {
       hideOnPress: true,
       delay: 0,
     });
-    markedFav();
   }
 
   const openToMap = () => {

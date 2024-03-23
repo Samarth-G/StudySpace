@@ -2,7 +2,7 @@ import { View, Text, FlatList, Dimensions } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import PlaceItem from './PlaceItem';
 import { SelectMarkerContext } from '../../Context/SelectMarkerContext';
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs, onSnapshot } from 'firebase/firestore';
 import { app } from '../../Utils/FirebaseConfig';
 import { useUser } from '@clerk/clerk-expo';
 
@@ -34,19 +34,21 @@ export default function PlaceListView({placeList}) {
 
     const db = getFirestore(app);
     useEffect(() => {
-      user&&getFav();
-    }, [user])
-    const getFav = async() => {
-      setFavList([]);
-      const q = query(collection(db, "fav-places"), 
-      where("email", "==", user?.primaryEmailAddress?.emailAddress));
+      if (user) {
+          const q = query(collection(db, "fav-places"), 
+              where("email", "==", user.primaryEmailAddress.emailAddress));
 
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        // console.log(doc.id, " => ", doc.data());
-        setFavList(favList => [...favList, doc.data()]);
-      });
-    }
+          const unsubscribe = onSnapshot(q, (querySnapshot) => {
+              const updatedFavList = [];
+              querySnapshot.forEach((doc) => {
+                  updatedFavList.push(doc.data());
+              });
+              setFavList(updatedFavList);
+          });
+
+          return () => unsubscribe(); 
+      }
+    }, [user]); 
 
     const isFav = (place) => {
       const result = favList.find(item=>item.place.id==place.id);
@@ -66,8 +68,7 @@ export default function PlaceListView({placeList}) {
         renderItem={({item, index})=>(
         <View key={index}>
             <PlaceItem place={item}
-            isFav={(place) => isFav(place)}
-            markedFav={() => getFav()}/>
+            isFav={(place) => isFav(place)}/>
         </View>
         )}
         />

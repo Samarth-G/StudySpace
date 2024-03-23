@@ -25,15 +25,15 @@ export default function HomeScreen() {
       locationRestriction: {
         circle: {
           center: {
-            latitude: location?.latitude,
-            longitude: location?.longitude,
+            latitude: LOCATION_LATITUDE, // location?.latitude,
+            longitude: LOCATION_LONGITUDE // location?.longitude,
           },
           radius: 1000.0,
         },
       },
     };
     GlobalApi.NewNearByPlace(data).then((resp) => {
-      // console.log(JSON.stringify(resp.data));
+      // console.log(JSON.stringify(resp.data?.places));
       setPlaceList(resp.data?.places);
     });
   };

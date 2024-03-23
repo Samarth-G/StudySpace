@@ -16,14 +16,14 @@ export default function AppMapView({placeList}) {
         provider={PROVIDER_GOOGLE}
         customMapStyle={MapViewStyle}
         region={{
-          latitude: location?.latitude,
-          longitude: location?.longitude,
+          latitude: LOCATION_LATITUDE, // location?.latitude,
+          longitude: LOCATION_LONGITUDE, // location?.longitude,
           latitudeDelta: 0.0041, 
           longitudeDelta: 0.0041}}> 
         <Marker 
           coordinate={{
-            latitude: location?.latitude,
-            longitude: location?.longitude
+            latitude: LOCATION_LATITUDE, // location?.latitude,
+            longitude: LOCATION_LONGITUDE // location?.longitude
           }}> 
           <Image source={require('./../../../assets/images/user-marker2.png')} 
           style={{width:50, height:50, shadowColor: '#287cff',
