@@ -15,7 +15,13 @@ export default function Markers({index, place}) {
           onPress={()=> setSelectedMarker(index)}
           > 
           <Image source={require('./../../../assets/images/lib-marker2.png')} 
-          style={{width:60, height:60}}
+          style={{width:60, 
+            height:60,
+            shadowColor: selectedMarker === index ? Colors.SUCCESS : 'transparent', // Apply shadow only to selectedMarker
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 1,
+            shadowRadius: 6,
+          }}
           />
     </Marker>
   )

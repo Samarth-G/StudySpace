@@ -29,7 +29,7 @@ export default {
     CORAL: '#FF7F50',
     
     RED: '#DC3545', // Red
-    SUCCESS: '#28A745', // Green
+    SUCCESS: '#287cff', // Green
     WARNING: '#FFC107', // Amber
     INFO: '#17A2B8',  // Turquoise  
 }

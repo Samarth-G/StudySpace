@@ -202,7 +202,7 @@ export default function PlaceItem({ place, isFav }) {
                 fontSize: 14,
               }}
             >
-              Rating
+              Traffic
             </Text>
             <Text
               style={{

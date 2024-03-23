@@ -1,5 +1,5 @@
-import { View, Text, FlatList } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, FlatList, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState, useContext } from 'react'
 import Colors from '../../Utils/Colors'
 import { getFirestore } from "firebase/firestore";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
@@ -7,11 +7,13 @@ import { useUser } from '@clerk/clerk-expo';
 import { app } from '../../Utils/FirebaseConfig';
 import PlaceItem from '../HomeScreen/PlaceItem';
 import { StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ListScreen() {
   const db = getFirestore(app);
   const {user} = useUser();
   const [favList, setFavList] = useState([]);
+  const navigation=useNavigation();
 
   useEffect(() => {
       if (user) {
@@ -40,11 +42,11 @@ export default function ListScreen() {
         data={favList}
         contentContainerStyle={{ flexGrow: 1 }}
         renderItem={({item, index}) => (
+          <TouchableOpacity onPress={() => navigation.navigate('home', { selectedID : item.place.id })}>
           <PlaceItem place={item.place} 
           key={index}
-          isFav={(place) => true}
-          markedFav={() => {}}
-           />
+          isFav={(place) => true}/>
+          </TouchableOpacity>
         )}
       /> 
     </View>
