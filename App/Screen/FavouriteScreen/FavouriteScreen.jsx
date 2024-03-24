@@ -42,7 +42,8 @@ export default function ListScreen() {
         data={favList}
         contentContainerStyle={{ flexGrow: 1 }}
         renderItem={({item, index}) => (
-          <TouchableOpacity onPress={() => navigation.navigate('home', { selectedID : item.place.id })}>
+          <TouchableOpacity onPress={() => navigation.navigate('homestack', 
+          { screen: 'home', params: { selectedID: item.place.id }})}>
           <PlaceItem place={item.place} 
           key={index}
           isFav={(place) => true}/>

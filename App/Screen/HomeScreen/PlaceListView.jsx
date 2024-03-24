@@ -17,7 +17,6 @@ export default function PlaceListView({placeList}) {
 
     const { selectedID } = route.params || {};
 
-    // Add this code snippet to use the `currentIndex` value
     useEffect(() => {
       if (selectedID !== undefined) {
         for (let i = 0; i < placeList.length; i++) {

@@ -1,5 +1,4 @@
 import { View, Text, Image, Dimensions, Pressable, Platform, Linking } from "react-native";
-import Toast from "react-native-root-toast";
 import React from "react";
 import Colors from "../../Utils/Colors";
 import GlobalApi from "../../Utils/GlobalApi";
@@ -7,46 +6,28 @@ import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { getFirestore, doc, setDoc, deleteDoc } from "firebase/firestore";
 import { app } from "../../Utils/FirebaseConfig";
 import { useUser } from "@clerk/clerk-expo";
-import { useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
+import { Rating, AirbnbRating } from 'react-native-ratings';
 
-export default function PlaceItem({ place, isFav }) {
+export default function ItemScreen() {
   const PLACE_PHOTO_BASE_URL = "https://places.googleapis.com/v1/";
   const { user } = useUser();
   const db = getFirestore(app);
-  const navigation = useNavigation();
+  const route = useRoute();
 
-  const addFav = async (place) => {
-    await setDoc(
-      doc(db, "fav-places", place.id + user.primaryEmailAddress), // (place.id + user.primaryEmailAddress.emailAddress)
-      {
-        email: user.primaryEmailAddress.emailAddress,
-        place: place, // placeID: place.id
-      } 
-    );
-    Toast.show("Added to favorites!", {
-      duration: Toast.durations.SHORT,
-      position: Toast.positions.BOTTOM,
-      shadow: true,
-      animation: true,
-      hideOnPress: true,
-      delay: 0,
-    });
-  };
+  const { place } = route.params || {};
 
-  const onRemoveFav = async(id) => {
-    await deleteDoc(doc(db, "fav-places", id));
-    Toast.show("Removed from favorites!", {
-      duration: Toast.durations.SHORT,
-      position: Toast.positions.BOTTOM,
-      shadow: true,
-      animation: true,
-      hideOnPress: true,
-      delay: 0,
+  const openToMap = () => {
+    const url = Platform.select({
+      ios:"maps:"+place.location.latitude+","+place?.location?.longitude+"?q="+place?.formattedAddress,
+      android:"geo:"+place.location.latitude+","+place?.location?.longitude+"?q="+place?.formattedAddress,
     });
+
+    Linking.openURL(url);
   }
 
-  const navItemScreen = () => {
-      navigation.navigate('item', { place: place })
+  const ratingCompleted = (rating) => {
+    console.log("Rating is: " + rating)
   }
 
   return (
@@ -64,39 +45,6 @@ export default function PlaceItem({ place, isFav }) {
         shadowRadius: 8,
       }}
     >
-      {!isFav(place) ? (
-        <Pressable
-          onPress={() => addFav(place)}
-          style={({ pressed }) => [
-            {
-              opacity: pressed ? 0.2 : 1,
-            },
-          ]}
-        >
-          <Ionicons
-            name="heart"
-            size={30}
-            color={Colors.WHITE_TRANSP}
-            style={{ position: "absolute", top: 15, right: 15 }}
-          />
-        </Pressable>
-      ) : (
-        <Pressable
-          onPress={() => onRemoveFav(place.id + user.primaryEmailAddress)}
-          style={({ pressed }) => [
-            {
-              opacity: pressed ? 0.2 : 1,
-            },
-          ]}
-        >
-          <Ionicons
-            name="heart"
-            size={30}
-            color={Colors.RED}
-            style={{ position: "absolute", top: 15, right: 15 }}
-          />
-        </Pressable>
-      )}
       <Image
         source={
           place?.photos
@@ -110,9 +58,9 @@ export default function PlaceItem({ place, isFav }) {
               }
             : require("./../../../assets/images/background.png")
         }
-        style={{ width: "100%", borderRadius: 20, height: 150, zIndex: -1 }}
+        style={{ width: "100%", borderRadius: 20, height: 250, zIndex: -1 }}
       />
-      <View style={{ padding: 15, paddingTop: 8, paddingBottom: 10 }}>
+      <View style={{ padding: 15, paddingTop: 15, paddingBottom: 15 }}>
         <Text
           numberOfLines={1}
           style={{
@@ -127,6 +75,7 @@ export default function PlaceItem({ place, isFav }) {
             color: Colors.GRAY,
             fontFamily: "outfit",
             fontSize: 12,
+            marginTop: 2,
           }}
         >
           {place?.formattedAddress.slice(0, -8)}
@@ -200,7 +149,7 @@ export default function PlaceItem({ place, isFav }) {
                 fontSize: 14,
               }}
             >
-              Traffic
+              Wifi
             </Text>
             <Text
               style={{
@@ -209,22 +158,69 @@ export default function PlaceItem({ place, isFav }) {
                 marginTop: 2,
               }}
             >
-              {place.rating !== undefined ? `${place.rating}` : "N/A"}
+              {place.accessibilityOptions.wheelchairAccessibleEntrance ==
+              true ? (
+                <Ionicons name="checkmark-circle" size={24} color="green" />
+              ) : (
+                <Ionicons name="close-circle" size={24} color="red" />
+              )}
             </Text>
           </View>
-          <Pressable onPress={() => navItemScreen()}
-            style={({ pressed }) => [
-              {
-                  padding: 12,
-                  backgroundColor: Colors.PRIMARY,
-                  paddingHorizontal: 14,
-                  borderRadius: 17,
-                  opacity: pressed ? 0.2 : 1
-              }
-          ]}>
-            <FontAwesome6 name="location-arrow" size={20} color="white" />
-          </Pressable>
+          <View>
+            <Text
+              style={{
+                fontFamily: "outfit",
+                color: Colors.GRAY,
+                fontSize: 14,
+              }}
+            >
+              Charging
+            </Text>
+            <Text
+              style={{
+                fontFamily: "outfit-medium",
+                fontSize: 14,
+                marginTop: 2,
+              }}
+            >
+              {place.accessibilityOptions.wheelchairAccessibleEntrance ==
+              true ? (
+                <Ionicons name="checkmark-circle" size={24} color="green" />
+              ) : (
+                <Ionicons name="close-circle" size={24} color="red" />
+              )}
+            </Text>
+          </View>
         </View>
+
+        <Rating
+          showRating
+          onFinishRating={ratingCompleted}
+          style={{ paddingVertical: 10 }}
+        />
+        <Pressable
+          onPress={() => openToMap()}
+          style={({ pressed }) => [
+            {
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 15,
+              padding: 12,
+              backgroundColor: Colors.PRIMARY,
+              paddingHorizontal: 14,
+              borderRadius: 17,
+              opacity: pressed ? 0.2 : 1,
+            },
+          ]}
+        >
+          <Text
+            style={{ color: "white", textAlign: "center", marginRight: 10 }}
+          >
+            Get Directions
+          </Text>
+          <FontAwesome6 name="location-arrow" size={20} color="white" />
+        </Pressable>
       </View>
     </View>
   );
